@@ -26,44 +26,42 @@ func TestSilentLiveDetection(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Run("Standardize the use of silent_live_detection_client", func(t *testing.T) {
-		sldc_request_configuration := face_match.WithSilentLiveDetectionClientRequestConfiguration(
-			face_match.DEFAULT_SILENT_LIVE_DETECTION_ADDRESS,
-			face_match.DEFAULT_SILENT_LIVE_DETECTION_REQUEST_LINE,
-			face_match.DEFAULT_SILENT_LIVE_DETECTION_HOST,
-		)
+	sldc_request_configuration := face_match.WithSilentLiveDetectionClientRequestConfiguration(
+		face_match.DEFAULT_SILENT_LIVE_DETECTION_ADDRESS,
+		face_match.DEFAULT_SILENT_LIVE_DETECTION_REQUEST_LINE,
+		face_match.DEFAULT_SILENT_LIVE_DETECTION_HOST,
+	)
 
-		sldc_basic_configuration := face_match.WithSilentLiveDetectionClientBasicConfiguration(
-			app_id,
-			api_secret,
-			api_key,
-		)
+	sldc_basic_configuration := face_match.WithSilentLiveDetectionClientBasicConfiguration(
+		app_id,
+		api_secret,
+		api_key,
+	)
 
-		sldc := face_match.NewSilentLiveDetectionClient(sldc_request_configuration, sldc_basic_configuration)
+	sldc := face_match.NewSilentLiveDetectionClient(sldc_request_configuration, sldc_basic_configuration)
 
-		err := sldc.Ready()
-		if err != nil {
-			t.Fatal(err)
-		}
+	err = sldc.Ready()
+	if err != nil {
+		t.Fatal(err)
+	}
 
-		err = sldc.AddInput(image_file_type, image)
-		if err != nil {
-			t.Fatal(err)
-		}
+	err = sldc.AddInput(image_file_type, image)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-		err = sldc.Do()
-		if err != nil {
-			t.Fatal(err)
-		}
+	err = sldc.Do()
+	if err != nil {
+		t.Fatal(err)
+	}
 
-		silent_live_detection_result, err := sldc.SilentLiveDetectionResponseBody.GetAntiSpoofResult()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if silent_live_detection_result.Ret != 0 {
-			t.Fatalf("silent_live_detection_result.Ret == %d", silent_live_detection_result.Ret)
-		}
+	silent_live_detection_result, err := sldc.SilentLiveDetectionResponseBody.GetAntiSpoofResult()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if silent_live_detection_result.Ret != 0 {
+		t.Fatalf("silent_live_detection_result.Ret == %d", silent_live_detection_result.Ret)
+	}
 
-		t.Logf("silent_live_detection_result.Score == %f", silent_live_detection_result.Score)
-	})
+	t.Logf("silent_live_detection_result.Score == %f", silent_live_detection_result.Score)
 }

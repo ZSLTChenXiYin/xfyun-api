@@ -35,20 +35,19 @@ func TestFaceMatchSensetimeClient(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	fmsc := face_match.NewFaceMatchSensetimeClient(
+		face_match.WithFaceMatchSensetimeClientBasicConfiguration(app_id, api_key),
+		face_match.WithFaceMatchSensetimeClientRequestConfiguration(
+			face_match.DEFAULT_FACE_MATCH_SENSETIME_REQUEST_ADDRESS,
+		),
+	)
+
+	err = fmsc.Ready()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	t.Run("Standardize the use of AddInput1 add AddInput2", func(t *testing.T) {
-		fmsc := face_match.NewFaceMatchSensetimeClient(
-			face_match.WithFaceMatchSensetimeClientBasicConfiguration(app_id, api_key),
-			face_match.WithFaceMatchSensetimeClientRequestConfiguration(
-				face_match.DEFAULT_FACE_MATCH_SENSETIME_REQUEST_ADDRESS,
-				face_match.DEFAULT_FACE_MATCH_SENSETIME_HOST,
-			),
-		)
-
-		err := fmsc.Ready()
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		err = fmsc.AddInput(1, image1)
 		if err != nil {
 			t.Fatal(err)
@@ -63,28 +62,12 @@ func TestFaceMatchSensetimeClient(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if fmsc.FaceMatchSensetimeResult.Code != "0" {
-			t.Fatalf("FaceMatchSensetimeResult == %v", fmsc.FaceMatchSensetimeResult)
-		}
 		defer fmsc.Flush()
 
 		t.Logf("FaceMatchSensetimeResult.Data == %f", fmsc.FaceMatchSensetimeResult.Data)
 	})
 
 	t.Run("Standardize the use of AddAllInput", func(t *testing.T) {
-		fmsc := face_match.NewFaceMatchSensetimeClient(
-			face_match.WithFaceMatchSensetimeClientBasicConfiguration(app_id, api_key),
-			face_match.WithFaceMatchSensetimeClientRequestConfiguration(
-				face_match.DEFAULT_FACE_MATCH_SENSETIME_REQUEST_ADDRESS,
-				face_match.DEFAULT_FACE_MATCH_SENSETIME_HOST,
-			),
-		)
-
-		err := fmsc.Ready()
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		err = fmsc.AddAllInput(image1, image2)
 		if err != nil {
 			t.Fatal(err)
@@ -93,9 +76,6 @@ func TestFaceMatchSensetimeClient(t *testing.T) {
 		err = fmsc.Do(true)
 		if err != nil {
 			t.Fatal(err)
-		}
-		if fmsc.FaceMatchSensetimeResult.Code != "0" {
-			t.Fatalf("FaceMatchSensetimeResult == %v", fmsc.FaceMatchSensetimeResult)
 		}
 		defer fmsc.Flush()
 

@@ -18,7 +18,6 @@ type XFYunAPICommonResult struct {
 // 讯飞云接口基础客户端
 type XFYunAPIHeaderVerificationClient struct {
 	RequestAddress string
-	Host           string
 }
 
 func (xfyhvc *XFYunAPIHeaderVerificationClient) NowCurTime() string {

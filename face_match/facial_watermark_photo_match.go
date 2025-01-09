@@ -17,7 +17,6 @@ import (
 
 const (
 	DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_REQUEST_ADDRESS = "https://api.xfyun.cn/v1/service/v1/image_identify/watermark_verification"
-	DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_HOST            = "api.xf-yun.com"
 )
 
 type FacialWatermarkPhotoMatchResult struct {
@@ -38,10 +37,9 @@ type FacialWatermarkPhotoMatchClient struct {
 
 type FacialWatermarkPhotoMatchClientOption func(*FacialWatermarkPhotoMatchClient)
 
-func WithFacialWatermarkPhotoMatchClientRequestConfiguration(request_address string, host string) FacialWatermarkPhotoMatchClientOption {
+func WithFacialWatermarkPhotoMatchClientRequestConfiguration(request_address string) FacialWatermarkPhotoMatchClientOption {
 	return func(fwpmc *FacialWatermarkPhotoMatchClient) {
 		fwpmc.xfyun_api_basic_client.RequestAddress = request_address
-		fwpmc.xfyun_api_basic_client.Host = host
 	}
 }
 
@@ -63,10 +61,6 @@ func NewFacialWatermarkPhotoMatchClient(options ...FacialWatermarkPhotoMatchClie
 		fwpmc.xfyun_api_basic_client.RequestAddress = DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_REQUEST_ADDRESS
 	}
 
-	if fwpmc.xfyun_api_basic_client.Host == "" {
-		fwpmc.xfyun_api_basic_client.Host = DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_HOST
-	}
-
 	fwpmc.facial_watermark_photo_match_request_form = make(url.Values)
 
 	return fwpmc
@@ -74,7 +68,6 @@ func NewFacialWatermarkPhotoMatchClient(options ...FacialWatermarkPhotoMatchClie
 
 func (fwpmc *FacialWatermarkPhotoMatchClient) SetRequestConfiguration(request_address string, host string) *FacialWatermarkPhotoMatchClient {
 	fwpmc.xfyun_api_basic_client.RequestAddress = request_address
-	fwpmc.xfyun_api_basic_client.Host = host
 
 	return fwpmc
 }
@@ -160,6 +153,63 @@ func (fwpmc *FacialWatermarkPhotoMatchClient) AddWatermarkImage(watermark_image 
 	return nil
 }
 
+func (fwpmc *FacialWatermarkPhotoMatchClient) AddAllImage(face_image []byte, watermark_image []byte) error {
+	if len(face_image) > 5*1024*1024 {
+		return errors.New("facial_watermark_photo_match: The face_image is too big")
+	}
+
+	if len(watermark_image) > 1*1024*1024 {
+		return errors.New("facial_watermark_photo_match: The watermark_image is too big")
+	}
+
+	dimg, img_type, err := image.Decode(bytes.NewReader(face_image))
+	if err != nil {
+		return err
+	}
+
+	if img_type != "jpg" && img_type != "jpeg" && img_type != "png" && img_type != "gif" && img_type != "bmp" && img_type != "tiff" {
+		return errors.New("facial_watermark_photo_match: The image type is not supported")
+	}
+
+	bounds := dimg.Bounds()
+	width := bounds.Dx()
+	height := bounds.Dy()
+
+	if width < 8 || height < 8 {
+		return errors.New("facial_watermark_photo_match: The image is too small")
+	}
+
+	if width > 4000 || height > 4000 {
+		return errors.New("facial_watermark_photo_match: The image is too large")
+	}
+
+	dimg, img_type, err = image.Decode(bytes.NewReader(watermark_image))
+	if err != nil {
+		return err
+	}
+
+	if img_type != "jpg" && img_type != "jpeg" && img_type != "png" && img_type != "gif" && img_type != "bmp" && img_type != "tiff" {
+		return errors.New("facial_watermark_photo_match: The image type is not supported")
+	}
+
+	bounds = dimg.Bounds()
+	width = bounds.Dx()
+	height = bounds.Dy()
+
+	if width < 8 || height < 8 {
+		return errors.New("facial_watermark_photo_match: The image is too small")
+	}
+
+	if width > 480 || height > 480 {
+		return errors.New("facial_watermark_photo_match: The image is too large")
+	}
+
+	fwpmc.facial_watermark_photo_match_request_form.Set("face_image", base64.StdEncoding.EncodeToString(face_image))
+	fwpmc.facial_watermark_photo_match_request_form.Set("watermark_image", base64.StdEncoding.EncodeToString(watermark_image))
+
+	return nil
+}
+
 func (fwpmc *FacialWatermarkPhotoMatchClient) Do(auto_rotate bool) error {
 	format_time := fwpmc.xfyun_api_basic_client.NowCurTime()
 
@@ -199,6 +249,16 @@ func (fwpmc *FacialWatermarkPhotoMatchClient) Do(auto_rotate bool) error {
 	json_facial_watermark_photo_match_response_body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return err
+	}
+
+	response_map := make(map[string]any)
+	err = json.Unmarshal(json_facial_watermark_photo_match_response_body, &response_map)
+	if err != nil {
+		return err
+	}
+
+	if response_map["code"] != "0" {
+		return fmt.Errorf("facial_watermark_photo_match: error_response == %v", json_facial_watermark_photo_match_response_body)
 	}
 
 	fwpmc.FacialWatermarkPhotoMatchResult = &FacialWatermarkPhotoMatchResult{}

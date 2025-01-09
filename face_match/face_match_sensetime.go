@@ -21,7 +21,6 @@ import (
 
 const (
 	DEFAULT_FACE_MATCH_SENSETIME_REQUEST_ADDRESS = "https://api.xfyun.cn/v1/service/v1/image_identify/face_verification"
-	DEFAULT_FACE_MATCH_SENSETIME_HOST            = "api.xf-yun.com"
 )
 
 type FaceMatchSensetimeResult struct {
@@ -42,10 +41,9 @@ type FaceMatchSensetimeClient struct {
 
 type FaceMatchSensetimeClientOption func(*FaceMatchSensetimeClient)
 
-func WithFaceMatchSensetimeClientRequestConfiguration(request_address string, host string) FaceMatchSensetimeClientOption {
+func WithFaceMatchSensetimeClientRequestConfiguration(request_address string) FaceMatchSensetimeClientOption {
 	return func(fmc *FaceMatchSensetimeClient) {
 		fmc.xfyun_api_basic_client.RequestAddress = request_address
-		fmc.xfyun_api_basic_client.Host = host
 	}
 }
 
@@ -67,10 +65,6 @@ func NewFaceMatchSensetimeClient(options ...FaceMatchSensetimeClientOption) *Fac
 		fmsc.xfyun_api_basic_client.RequestAddress = DEFAULT_FACE_MATCH_SENSETIME_REQUEST_ADDRESS
 	}
 
-	if fmsc.xfyun_api_basic_client.Host == "" {
-		fmsc.xfyun_api_basic_client.Host = DEFAULT_FACE_MATCH_SENSETIME_HOST
-	}
-
 	fmsc.face_match_request_form = make(url.Values)
 
 	return fmsc
@@ -78,7 +72,6 @@ func NewFaceMatchSensetimeClient(options ...FaceMatchSensetimeClientOption) *Fac
 
 func (fmsc *FaceMatchSensetimeClient) SetRequestConfiguration(request_address string, host string) *FaceMatchSensetimeClient {
 	fmsc.xfyun_api_basic_client.RequestAddress = request_address
-	fmsc.xfyun_api_basic_client.Host = host
 	return fmsc
 }
 
@@ -237,6 +230,16 @@ func (fmsc *FaceMatchSensetimeClient) Do(auto_rotate bool) error {
 	json_face_match_sensetime_response_body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return err
+	}
+
+	response_map := make(map[string]any)
+	err = json.Unmarshal(json_face_match_sensetime_response_body, &response_map)
+	if err != nil {
+		return err
+	}
+
+	if response_map["code"] != "0" {
+		return fmt.Errorf("face_match_sensetime: error_response == %v", json_face_match_sensetime_response_body)
 	}
 
 	fmsc.FaceMatchSensetimeResult = &FaceMatchSensetimeResult{}

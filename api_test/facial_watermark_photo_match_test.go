@@ -39,9 +39,13 @@ func TestFacialWatermarkPhotoMatch(t *testing.T) {
 		face_match.WithFacialWatermarkPhotoMatchClientBasicConfiguration(app_id, api_key),
 		face_match.WithFacialWatermarkPhotoMatchClientRequestConfiguration(
 			face_match.DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_REQUEST_ADDRESS,
-			face_match.DEFAULT_FACIAL_WATERMARK_PHOTO_MATCH_HOST,
 		),
 	)
+
+	err = fwpmc.Ready()
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	err = fwpmc.AddFaceImage(face_image)
 	if err != nil {
@@ -56,9 +60,6 @@ func TestFacialWatermarkPhotoMatch(t *testing.T) {
 	err = fwpmc.Do(true)
 	if err != nil {
 		t.Fatal(err)
-	}
-	if fwpmc.FacialWatermarkPhotoMatchResult.Code != "0" {
-		t.Fatalf("FacialWatermarkPhotoMatchResult == %v", fwpmc.FacialWatermarkPhotoMatchResult)
 	}
 	defer fwpmc.Flush()
 
