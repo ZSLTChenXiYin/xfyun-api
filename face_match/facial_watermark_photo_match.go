@@ -13,6 +13,10 @@ import (
 	"strings"
 
 	"github.com/ZSLTChenXiYin/xfyun-api/basic_client"
+
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 )
 
 const (

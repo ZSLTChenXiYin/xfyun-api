@@ -145,17 +145,17 @@ func (sldrb *SilentLiveDetectionResponseBody) GetAntiSpoofResult() (*SilentLiveD
 	}
 
 	// 初始化SilentLiveDetectionResult对象
-	rmr := &SilentLiveDetectionResult{}
+	sldr := &SilentLiveDetectionResult{}
 
 	// 将解码后的JSON文本解析到SilentLiveDetectionResult对象中
-	err = json.Unmarshal(json_text, rmr)
+	err = json.Unmarshal(json_text, sldr)
 	if err != nil {
 		// 如果JSON解析过程中出现错误，则返回nil和错误信息
 		return nil, err
 	}
 
 	// 返回解析后的SilentLiveDetectionResult对象和nil错误
-	return rmr, nil
+	return sldr, nil
 }
 
 // 静默活体检测客户端

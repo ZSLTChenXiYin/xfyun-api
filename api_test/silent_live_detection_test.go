@@ -54,6 +54,7 @@ func TestSilentLiveDetection(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer sldc.Flush()
 
 	silent_live_detection_result, err := sldc.SilentLiveDetectionResponseBody.GetAntiSpoofResult()
 	if err != nil {
