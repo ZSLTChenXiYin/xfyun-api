@@ -29,7 +29,7 @@ func TestFacialDetectionAndAttributeAnalysis(t *testing.T) {
 	fdaaac := face_match.NewFacialDetectionAndAttributeAnalysisClient(
 		face_match.WithFacialDetectionAndAttributeAnalysisClientBasicConfiguration(app_id, api_secret, api_key),
 		face_match.WithFacialDetectionAndAttributeAnalysisClientRequestConfiguration(
-			face_match.DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_ADDRESS,
+			face_match.DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_ADDRESS,
 			face_match.DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_LINE,
 			face_match.DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_HOST,
 		),

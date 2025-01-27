@@ -239,7 +239,7 @@ func (fmsc *FaceMatchSensetimeClient) Do(auto_rotate bool) error {
 	}
 
 	if response_map["code"] != "0" {
-		return fmt.Errorf("face_match_sensetime: error_response == %v", json_face_match_sensetime_response_body)
+		return fmt.Errorf("face_match_sensetime: error_response == %v", response_map)
 	}
 
 	fmsc.FaceMatchSensetimeResult = &FaceMatchSensetimeResult{}

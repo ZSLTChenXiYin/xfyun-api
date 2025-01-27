@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_ADDRESS      = "https://api.xf-yun.com/v1/private/s67c9c78c"
-	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_LINE = "POST /v1/private/s67c9c78c HTTP/1.1"
-	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_HOST         = "api.xf-yun.com"
+	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_ADDRESS = "https://api.xf-yun.com/v1/private/s67c9c78c"
+	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_LINE    = "POST /v1/private/s67c9c78c HTTP/1.1"
+	DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_HOST            = "api.xf-yun.com"
 )
 
 type FacialDetectionAndAttributeAnalysisRequestBody struct {
@@ -135,9 +135,9 @@ type FacialDetectionAndAttributeAnalysisClient struct {
 	FacialDetectionAndAttributeAnalysisResponseBody *FacialDetectionAndAttributeAnalysisResponseBody
 }
 
-type FacialFeatureAnalysisTupuechClientOption func(*FacialDetectionAndAttributeAnalysisClient)
+type FacialDetectionAndAttributeAnalysisClientOption func(*FacialDetectionAndAttributeAnalysisClient)
 
-func WithFacialDetectionAndAttributeAnalysisClientRequestConfiguration(request_address string, request_line string, host string) FacialFeatureAnalysisTupuechClientOption {
+func WithFacialDetectionAndAttributeAnalysisClientRequestConfiguration(request_address string, request_line string, host string) FacialDetectionAndAttributeAnalysisClientOption {
 	return func(fdaaac *FacialDetectionAndAttributeAnalysisClient) {
 		fdaaac.xfyun_api_basic_client.RequestAddress = request_address
 		fdaaac.xfyun_api_basic_client.RequestLine = request_line
@@ -145,7 +145,7 @@ func WithFacialDetectionAndAttributeAnalysisClientRequestConfiguration(request_a
 	}
 }
 
-func WithFacialDetectionAndAttributeAnalysisClientBasicConfiguration(app_id string, api_secret string, api_key string) FacialFeatureAnalysisTupuechClientOption {
+func WithFacialDetectionAndAttributeAnalysisClientBasicConfiguration(app_id string, api_secret string, api_key string) FacialDetectionAndAttributeAnalysisClientOption {
 	return func(fdaaac *FacialDetectionAndAttributeAnalysisClient) {
 		fdaaac.app_id = app_id
 		fdaaac.api_secret = api_secret
@@ -153,7 +153,7 @@ func WithFacialDetectionAndAttributeAnalysisClientBasicConfiguration(app_id stri
 	}
 }
 
-func NewFacialDetectionAndAttributeAnalysisClient(options ...FacialFeatureAnalysisTupuechClientOption) *FacialDetectionAndAttributeAnalysisClient {
+func NewFacialDetectionAndAttributeAnalysisClient(options ...FacialDetectionAndAttributeAnalysisClientOption) *FacialDetectionAndAttributeAnalysisClient {
 	fdaaac := &FacialDetectionAndAttributeAnalysisClient{}
 
 	for _, option := range options {
@@ -161,7 +161,7 @@ func NewFacialDetectionAndAttributeAnalysisClient(options ...FacialFeatureAnalys
 	}
 
 	if fdaaac.xfyun_api_basic_client.RequestAddress == "" {
-		fdaaac.xfyun_api_basic_client.RequestAddress = DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_ADDRESS
+		fdaaac.xfyun_api_basic_client.RequestAddress = DEFAULT_FACIAL_DETECTION_AND_ATTRIBUTE_ANALYSIS_REQUEST_ADDRESS
 	}
 
 	if fdaaac.xfyun_api_basic_client.RequestLine == "" {

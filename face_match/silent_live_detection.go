@@ -13,9 +13,9 @@ import (
 )
 
 const (
-	DEFAULT_SILENT_LIVE_DETECTION_ADDRESS      = "https://api.xf-yun.com/v1/private/s67c9c78c"
-	DEFAULT_SILENT_LIVE_DETECTION_REQUEST_LINE = "POST /v1/private/s67c9c78c HTTP/1.1"
-	DEFAULT_SILENT_LIVE_DETECTION_HOST         = "api.xf-yun.com"
+	DEFAULT_SILENT_LIVE_DETECTION_REQUEST_ADDRESS = "https://api.xf-yun.com/v1/private/s67c9c78c"
+	DEFAULT_SILENT_LIVE_DETECTION_REQUEST_LINE    = "POST /v1/private/s67c9c78c HTTP/1.1"
+	DEFAULT_SILENT_LIVE_DETECTION_HOST            = "api.xf-yun.com"
 )
 
 // 静默活体检测请求体
@@ -245,7 +245,7 @@ func NewSilentLiveDetectionClient(options ...SilentLiveDetectionClientOption) *S
 
 	// 确保请求地址已设置，若未设置则使用默认值。
 	if sldc.xfyun_api_basic_client.RequestAddress == "" {
-		sldc.xfyun_api_basic_client.RequestAddress = DEFAULT_SILENT_LIVE_DETECTION_ADDRESS
+		sldc.xfyun_api_basic_client.RequestAddress = DEFAULT_SILENT_LIVE_DETECTION_REQUEST_ADDRESS
 	}
 
 	// 确保请求行已设置，若未设置则使用默认值。

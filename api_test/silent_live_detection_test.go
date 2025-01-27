@@ -27,7 +27,7 @@ func TestSilentLiveDetection(t *testing.T) {
 	}
 
 	sldc_request_configuration := face_match.WithSilentLiveDetectionClientRequestConfiguration(
-		face_match.DEFAULT_SILENT_LIVE_DETECTION_ADDRESS,
+		face_match.DEFAULT_SILENT_LIVE_DETECTION_REQUEST_ADDRESS,
 		face_match.DEFAULT_SILENT_LIVE_DETECTION_REQUEST_LINE,
 		face_match.DEFAULT_SILENT_LIVE_DETECTION_HOST,
 	)

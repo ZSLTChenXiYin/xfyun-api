@@ -25,7 +25,7 @@ xfyun-api 的部署依赖 Go modules，如果你还没有 go mod，你需要首�
 ```sh
 go mod init myproject
 ```
-安装 MyGO
+安装 xfyun-api
 ```sh
 go get -u github.com/ZSLTChenXiYin/xfyun-api
 ```

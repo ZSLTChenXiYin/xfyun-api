@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_ADDRESS = "https://api.xfyun.cn/v1/service/v1/image_identify/silent_detection"
+	DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_REQUEST_ADDRESS = "https://api.xfyun.cn/v1/service/v1/image_identify/silent_detection"
 )
 
 type SilentLiveDetectionSensetimeResult struct {
@@ -61,7 +61,7 @@ func NewSilentLiveDetectionSensetimeClient(options ...SilentLiveDetectionSenseti
 	}
 
 	if sldsc.xfyun_api_basic_client.RequestAddress == "" {
-		sldsc.xfyun_api_basic_client.RequestAddress = DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_ADDRESS
+		sldsc.xfyun_api_basic_client.RequestAddress = DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_REQUEST_ADDRESS
 	}
 
 	sldsc.silent_live_detection_sensetime_request_form = make(url.Values)
@@ -150,7 +150,7 @@ func (sldsc *SilentLiveDetectionSensetimeClient) Do(get_image bool) error {
 	}
 
 	if response_map["code"] != "0" {
-		return fmt.Errorf("silent_live_detection_sensetime: error_response == %v", json_silent_live_detection_sensetime_response_body)
+		return fmt.Errorf("silent_live_detection_sensetime: error_response == %v", response_map)
 	}
 
 	sldsc.SilentLiveDetectionSensetimeResult = &SilentLiveDetectionSensetimeResult{}

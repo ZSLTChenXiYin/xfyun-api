@@ -26,7 +26,7 @@ func TestSilentLiveDetectionSensetime(t *testing.T) {
 
 	sldsc := face_match.NewSilentLiveDetectionSensetimeClient(
 		face_match.WithSilentLiveDetectionSensetimeClientBasicConfiguration(app_id, api_key),
-		face_match.WithSilentLiveDetectionSensetimeClientRequestConfiguration(face_match.DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_ADDRESS),
+		face_match.WithSilentLiveDetectionSensetimeClientRequestConfiguration(face_match.DEFAULT_SILENT_LIVE_DETECTION_SENSETIME_REQUEST_ADDRESS),
 	)
 
 	err = sldsc.Ready()
