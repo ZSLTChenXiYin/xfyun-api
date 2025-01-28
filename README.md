@@ -12,7 +12,7 @@
 * [讯飞云开放平台](https://www.xfyun.com/)
 * [讯飞云服务WebAPI](https://www.xfyun.cn/doc/)
 #### 目前为止，xfyun-api 可以提供以下支持：
-* 人脸识别服务调用（除人脸特征分析tupuech外）
+* 人脸识别服务调用（已齐全）
 ## 里程碑 ##
 * 实现各服务的基本调用接口 < latest
 ## 版本实现 ##
